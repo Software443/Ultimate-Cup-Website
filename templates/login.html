@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | Ultimate Cup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='images/Ultimate Cup White.png') }}">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ff6a00, #ff944d);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            color: white;
+            animation: popIn 1.2s ease-in-out;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .login-container img {
+            width: 120px;
+            margin-bottom: 20px;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 0.95rem;
+            color: #fff8f2;
+            margin-bottom: 25px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border: 2px solid #ff944d;
+        }
+
+        button {
+            background: #ffffff;
+            color: #ff6a00;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #ff6a00;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(255, 106, 0, 0.5);
+        }
+
+        .alert {
+            background: rgba(255, 255, 255, 0.2);
+            border-left: 5px solid #ff4444;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: left;
+            font-weight: 500;
+            animation: slideDown 0.4s ease-in-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .back-home {
+            margin-top: 20px;
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            font-size: 0.95rem;
+            opacity: 0.9;
+            transition: 0.3s;
+        }
+
+        .back-home:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 15px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            text-align: center;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+        <img src="{{ url_for('static', filename='images/Ultimate Cup Black.png') }}" alt="Ultimate Cup Logo">
+        <h2>Admin Login</h2>
+        <p>Enter your credentials to access the Ultimate Cup control panel</p>
+
+        <!-- 🔔 Flash Message -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="alert">
+            {% for message in messages %}
+            {{ message }}
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('login') }}">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+
+        <a href="{{ url_for('index') }}" class="back-home">🏠 Back to Home</a>
+    </div>
+
+    <footer>© 2025 Ultimate Cup | Admin Access Panel</footer>
+
+</body>
+
+</html>

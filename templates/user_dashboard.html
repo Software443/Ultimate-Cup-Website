@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Cup | {{ year }} Ratings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='images/Ultimate Cup White.png') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f7f9fc, #ffffff);
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #FF6A00;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 30px auto;
+            text-align: center;
+        }
+
+        h2 {
+            color: #FF6A00;
+            margin-bottom: 20px;
+        }
+
+        /* 🔥 Table Styling */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            background: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+            min-width: 600px;
+        }
+
+        thead {
+            background-color: #FF6A00;
+            color: white;
+        }
+
+        th {
+            padding: 12px 15px;
+            text-align: center;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            text-align: center;
+        }
+
+        /* Alternating row colors */
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:nth-child(odd) {
+            background-color: #fff;
+        }
+
+        /* Highlight top 3 */
+        tbody tr:nth-child(-n+3) {
+            background-color: #fff4e6;
+            font-weight: 600;
+        }
+
+        /* Hover effect */
+        tbody tr:hover {
+            background-color: #ffe1c2;
+            transition: 0.3s ease;
+        }
+
+        /* Team badge */
+        img {
+            border-radius: 50%;
+            border: 2px solid #ddd;
+        }
+
+        /* Chart Section */
+        .chart-container {
+            margin-top: 50px;
+        }
+
+        /* Button */
+        a.btn {
+            display: inline-block;
+            background: #FF6A00;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        a.btn:hover {
+            background: #e75c00;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 40px;
+            color: #777;
+            font-size: 0.9rem;
+            padding-bottom: 20px;
+        }
+
+        /* Year Filter */
+        select {
+            background: white;
+            border: 1px solid #ccc;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        label {
+            font-weight: 600;
+            color: #FF6A00;
+            margin-right: 8px;
+        }
+
+        .gold-row {
+            background: linear-gradient(90deg, #ffd700, #fff3b0);
+            font-weight: 600;
+        }
+
+        .silver-row {
+            background: linear-gradient(90deg, #c0c0c0, #f0f0f0);
+            font-weight: 600;
+        }
+
+        .bronze-row {
+            background: linear-gradient(90deg, #cd7f32, #ffe5b4);
+            font-weight: 600;
+        }
+
+        /* 📱 Mobile Responsive Adjustments */
+        @media (max-width: 768px) {
+            header {
+                font-size: 1.4rem;
+                padding: 12px;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+            }
+
+            th,
+            td {
+                padding: 10px;
+                font-size: 13px;
+            }
+
+            a.btn {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+
+            .chart-container {
+                margin-top: 30px;
+            }
+
+            table {
+                min-width: 100%;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            th,
+            td {
+                padding: 8px;
+                font-size: 12px;
+            }
+
+            .container {
+                width: 95%;
+                margin: 20px auto;
+            }
+
+            .chart-container {
+                margin-top: 20px;
+            }
+
+            header {
+                font-size: 1.2rem;
+            }
+
+            table tbody tr:hover {
+                background: #fff5ef;
+                transition: background 0.3s ease;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>🏆 Ultimate Cup Dashboard</header>
+
+    <div class="container">
+        <h2>{{ year }} Team Ratings</h2>
+
+        <form method="get" action="{{ url_for('user_dashboard') }}" style="margin-bottom: 20px;">
+            <label for="year">Select Year:</label>
+            <select name="year" id="year" onchange="this.form.submit()">
+                {% for y in years %}
+                <option value="{{ y }}" {% if y==year %}selected{% endif %}>{{ y }}</option>
+                {% endfor %}
+            </select>
+        </form>
+
+        <!-- Responsive table wrapper -->
+        <table id="rating-table" style="width:100%; border-collapse:collapse; margin-top:20px;">
+            <thead style="background:#ff6a00; color:white;">
+                <tr>
+                    <th>Rank</th>
+                    <th>Badge</th>
+                    <th>Team</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in table %}
+                <tr style="text-align:center; cursor:pointer;" onclick="showTeamSummary('{{ row.team_name }}')" class="
+                {% if loop.index == 1 %}gold-row{% elif loop.index == 2 %}silver-row{% elif loop.index == 3 %}bronze-row{% endif %}
+            ">
+                    <td>{{ row.Rank }}</td>
+                    <td>
+                        {% if row.badge %}
+                        <img src="{{ row.badge }}" alt="Badge" style="width:40px;height:40px;border-radius:50%;">
+                        {% else %}
+                        🏳️
+                        {% endif %}
+                    </td>
+                    <td style="font-weight:600;color:#ff6a00;">{{ row.team_name }}</td>
+                    <td>{{ row.points }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- 👇 Summary area appears here dynamically -->
+        <div id="team-summary" style="margin-top:40px; text-align:center;"></div>
+
+        <!-- chart container -->
+        <div id="chart" class="chart-container"></div>
+
+        <a href="{{ url_for('index') }}" class="btn">🏠 Back to Home</a>
+    </div>
+
+    <footer>© 2025 Ultimate Cup | Data Visualization Powered by Plotly & Flask</footer>
+
+    <script id="plot-data" type="application/json">
+        {{ graphJSON | safe }}
+    </script>
+
+    <script>
+        const graphData = JSON.parse(document.getElementById('plot-data').textContent);
+        Plotly.newPlot('chart', graphData.data, graphData.layout, { responsive: true });
+    </script>
+    <script>
+        function showTeamSummary(teamName) {
+            // Add loading indicator
+            const summaryDiv = document.getElementById('team-summary');
+            summaryDiv.innerHTML = `<p style="color:#555;">Loading ${teamName}'s summary...</p>`;
+
+            fetch(`/team_summary?team=${encodeURIComponent(teamName)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        summaryDiv.innerHTML = `<p style="color:red;">${data.error}</p>`;
+                        return;
+                    }
+
+                    // Smooth transition
+                    summaryDiv.style.opacity = 0;
+                    summaryDiv.innerHTML = `
+                <div style="animation:fadeIn 0.8s ease forwards;">
+                    <h3 style="color:#FF6A00; margin-bottom:15px;">🏆 ${teamName} - Performance Summary</h3>
+                    <table style="width:60%; margin:auto; border-collapse:collapse; background:white; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+                        <tr><th style="padding:10px;">Wins</th><td style="padding:10px;">${data.wins}</td></tr>
+                        <tr><th style="padding:10px;">Losses</th><td style="padding:10px;">${data.losses}</td></tr>
+                        <tr><th style="padding:10px;">Draws</th><td style="padding:10px;">${data.draws}</td></tr>
+                        <tr><th style="padding:10px;">Winning %</th><td style="padding:10px;">${data.win_percentage.toFixed(2)}%</td></tr>
+                    </table>
+                </div>
+            `;
+                    setTimeout(() => summaryDiv.style.opacity = 1, 100);
+                })
+                .catch(err => {
+                    summaryDiv.innerHTML = `<p style="color:red;">Error loading summary.</p>`;
+                    console.error(err);
+                });
+        }
+    </script>
+
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+</body>
+
+</html>

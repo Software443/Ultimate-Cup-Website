@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Player</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ff6a00, #ff944d);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+            margin: 0;
+        }
+
+        .form-container {
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #ff6a00;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        input,
+        select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-top: 5px;
+            font-size: 15px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px;
+            background: #ff6a00;
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #ff944d;
+            transform: scale(1.05);
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #ff6a00;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <h2>Add Player</h2>
+        <form method="POST" action="{{ url_for('add_player') }}">
+            <label>Player Name:</label>
+            <input type="text" name="name" placeholder="Enter player name" required>
+
+            <label>Team:</label>
+            <select name="team_id" required>
+                {% for team in teams %}
+                <option value="{{ team.id }}">{{ team.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Goals:</label>
+            <input type="number" name="goals" value="0" min="0">
+
+            <label>Yellow Cards:</label>
+            <input type="number" name="yellow_cards" value="0" min="0">
+
+            <label>Red Cards:</label>
+            <input type="number" name="red_cards" value="0" min="0">
+
+            <button type="submit">Add Player</button>
+        </form>
+        <a href="{{ url_for('admin_dashboard') }}">← Back to Dashboard</a>
+    </div>
+</body>
+
+</html>

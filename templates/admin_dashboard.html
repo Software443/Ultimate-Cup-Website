@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Ultimate Cup</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+        }
+
+        header {
+            background: #FF6A00;
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+        }
+
+        .container {
+            padding: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            color: #FF6A00;
+            margin-bottom: 20px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            font-size: 15px;
+        }
+
+        button {
+            background: #FF6A00;
+            border: none;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #e45b00;
+        }
+
+        .btn-edit,
+        .btn-delete {
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            margin: 2px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-edit {
+            background: #ffb74d;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #ffa726;
+        }
+
+        .btn-delete {
+            background: #e57373;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #f44336;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>🏆 Ultimate Cup Admin Dashboard</h1>
+        <nav>
+            <a href="{{ url_for('user_dashboard') }}">User Dashboard</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </nav>
+    </header>
+
+    <div class="container">
+
+        <!-- Add Team -->
+        <div class="card">
+            <h2>➕ Add Team</h2>
+            <form action="{{ url_for('add_team') }}" method="POST" enctype="multipart/form-data">
+                <input type="text" name="name" placeholder="Team Name" required>
+
+                <label>Upload Team Badge (optional):</label>
+                <input type="file" name="badge">
+
+                <input type="number" name="year" placeholder="Year (e.g., 2025)" required>
+                <input type="number" name="points" placeholder="Points" required>
+
+                <button type="submit">Add Team</button>
+            </form>
+        </div>
+
+        <hr>
+        <h3>🏁 Manage Teams</h3>
+        <table border="1" cellpadding="10" cellspacing="0" width="100%">
+            <tr style="background:#FF6A00; color:white;">
+                <th>ID</th>
+                <th>Team Name</th>
+                <th>Coach</th>
+                <th>Actions</th>
+            </tr>
+            {% for team in teams %}
+            <tr>
+                <td>{{ team['id'] }}</td>
+                <td>{{ team['name'] }}</td>
+                <td>{{ team['coach'] or '—' }}</td>
+                <td>
+                    <form action="{{ url_for('edit_team', id=team['id']) }}" method="post" style="display:inline;">
+                        <input type="text" name="name" value="{{ team['name'] }}" hidden>
+                        <button type="submit" class="btn-edit">✏️ Edit</button>
+                    </form>
+                    <form action="{{ url_for('delete_team', id=team['id']) }}" method="post" style="display:inline;">
+                        <button type="submit" class="btn-delete">🗑️ Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br><br>
+        <!-- Add Player -->
+        <div class="card">
+            <a href="{{ url_for('add_player') }}" class="btn btn-success">➕ Add Player</a>
+
+            <h2>👥 Manage Player</h2>
+            <table style="width:100%; border-collapse:collapse;">
+                <thead style="background:#FF6A00; color:white;">
+                    <tr>
+                        <th>Player Name</th>
+                        <th>Team</th>
+                        <th>Goals</th>
+                        <th>Yellow Cards</th>
+                        <th>Red Cards</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in players %}
+                    <tr style="text-align:center;">
+                        <td>{{ player['name'] }}</td>
+                        <td>
+                            {% for team in teams %}
+                            {% if team['id'] == player['team_id'] %}
+                            {{ team['name'] }}
+                            {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>{{ player['goals'] or 0 }}</td>
+                        <td>{{ player['yellow_cards'] or 0 }}</td>
+                        <td>{{ player['red_cards'] or 0 }}</td>
+                        <td>
+                            <a href="{{ url_for('edit_player', id=player['id']) }}">✏️</a>
+                            <a href="{{ url_for('delete_player', id=player['id']) }}">🗑️</a>
+
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <hr>
+
+
+        <!-- Add Match -->
+        <div class="card">
+            <h3 style="color:#FF6A00;">⚔️ Add Match Fixture</h3>
+
+            <form method="POST" action="{{ url_for('add_match') }}" id="addMatchForm"
+                style="background:#fff3e0;padding:20px;border-radius:10px;">
+
+                <!-- 🏟 Team Selection -->
+                <label>Team A:</label>
+                <select name="team_a" id="teamA" required>
+                    <option value="">--Select Team--</option>
+                    {% for team in teams %}
+                    <option value="{{ team.id }}">{{ team.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <label>Team B:</label>
+                <select name="team_b" id="teamB" required>
+                    <option value="">--Select Team--</option>
+                    {% for team in teams %}
+                    <option value="{{ team.id }}">{{ team.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <br><br>
+
+                <!-- ⚽ Match Result -->
+                <label>Score (A - B):</label>
+                <input type="number" name="score_a" id="scoreA" min="0" required style="width:60px;"> -
+                <input type="number" name="score_b" id="scoreB" min="0" required style="width:60px;">
+                <br><br>
+
+                <!-- 🟨 Yellow Cards -->
+                <label>⚠️ Yellow Cards (A - B):</label>
+                <input type="number" name="yellow_a" min="0" value="0" style="width:60px;"> -
+                <input type="number" name="yellow_b" min="0" value="0" style="width:60px;">
+                <br><br>
+
+                <!-- 🟥 Red Cards -->
+                <label>🟥 Red Cards (A - B):</label>
+                <input type="number" name="red_a" min="0" value="0" style="width:60px;"> -
+                <input type="number" name="red_b" min="0" value="0" style="width:60px;">
+                <br><br>
+
+                <!-- 🏆 Stage -->
+                <label>Stage:</label>
+                <input type="text" name="stage" placeholder="Group Stage, Quarter Final..." required><br><br>
+
+                <!-- 🏟 Venue -->
+                <label>Venue:</label>
+                <input type="text" name="venue" required><br><br>
+
+                <!-- 📅 Date -->
+                <label>Date:</label>
+                <input type="date" name="date" required><br><br>
+
+                <!-- ⚽ Team A Scorers Section -->
+                <div>
+                    <h4>⚽ Team A Scorers</h4>
+                    <div id="scorersAContainer"></div>
+                    <button type="button" onclick="addScorer('A')"
+                        style="background:#FF6A00;color:white;border:none;padding:6px 12px;border-radius:6px;margin-top:6px;">
+                        ➕ Add Scorer
+                    </button>
+                </div>
+                <br>
+
+                <!-- ⚽ Team B Scorers Section -->
+                <div>
+                    <h4>⚽ Team B Scorers</h4>
+                    <div id="scorersBContainer"></div>
+                    <button type="button" onclick="addScorer('B')"
+                        style="background:#FF6A00;color:white;border:none;padding:6px 12px;border-radius:6px;margin-top:6px;">
+                        ➕ Add Scorer
+                    </button>
+                </div>
+
+                <br><br>
+
+                <button type="submit"
+                    style="background:#FF6A00;color:white;border:none;padding:10px 20px;border-radius:6px;font-weight:600;">
+                    ✅ Add Match
+                </button>
+            </form>
+
+            <script>
+                // 🧩 Prevent Team A and B from being the same
+                document.getElementById('addMatchForm').addEventListener('submit', function (e) {
+                    const teamA = document.getElementById('teamA').value;
+                    const teamB = document.getElementById('teamB').value;
+
+                    if (teamA === teamB) {
+                        e.preventDefault();
+                        alert("❌ Team A and Team B cannot be the same!");
+                    }
+                });
+
+                // ⚽ Add scorers dynamically
+                function addScorer(team) {
+                    const container = document.getElementById(`scorers${team}Container`);
+                    const scorerDiv = document.createElement("div");
+                    scorerDiv.innerHTML = `
+            <select name="scorers[]" required>
+                <option value="">--Select Player--</option>
+                {% for player in players %}
+                <option value="{{ player.id }}">{{ player.name }} ({{ player.team_name }})</option>
+                {% endfor %}
+            </select>
+            <input type="number" name="goals_${team.toLowerCase()}[]" min="1" value="1" style="width:50px;" title="Number of goals">
+            <button type="button" onclick="this.parentElement.remove()" style="margin-left:5px;">❌</button>
+            <br><br>
+        `;
+                    container.appendChild(scorerDiv);
+                }
+            </script>
+
+        </div>
+        <hr>
+        <h3>🏆 Manage Matches</h3>
+        <table border="1" cellpadding="10" cellspacing="0" width="100%">
+            <tr style="background:#FF6A00; color:white;">
+                <th>ID</th>
+                <th>Team A</th>
+                <th>Team B</th>
+                <th>Score</th>
+                <th>Stage</th>
+                <th>Venue</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+            {% for match in matches %}
+            <tr>
+                <td>{{ match['id'] }}</td>
+                <td>{{ match['team_a_name'] }}</td>
+                <td>{{ match['team_b_name'] }}</td>
+                <td>{{ match['score_a'] }} - {{ match['score_b'] }}</td>
+                <td>{{ match['stage'] }}</td>
+                <td>{{ match['venue'] }}</td>
+                <td>{{ match['date'] }}</td>
+                <td>
+                    <a href="{{ url_for('edit_match', match_id=match.id) }}" class="btn btn-sm btn-warning">✏️ Edit</a>
+                    <form method="POST" action="{{ url_for('delete_match', match_id=match.id) }}"
+                        style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Delete this match?')">🗑️ Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+
+    </div>
+
+</body>
+
+</html>

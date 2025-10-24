@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚔️ Match Fixtures | Ultimate Cup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='images/Ultimate Cup White.png') }}">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+            overflow-x: hidden;
+            background: linear-gradient(rgba(255, 106, 0, 0.7), rgba(255, 148, 77, 0.75)),
+            url("{{ url_for('static', filename='images/fixture.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
+            animation: slideBackground 24s infinite ease-in-out;
+            transition: background-image 1s ease-in-out;
+        }
+
+        /* ⚽ Style for goal scorers */
+        .scorers {
+            font-style: italic;
+            font-size: 0.9rem;
+            /* slightly smaller than team name */
+            color: #444;
+            opacity: 0.85;
+        }
+
+        @keyframes slideBackground {
+            0% {
+                background-image: linear-gradient(rgba(83, 59, 42, 0.7), rgba(53, 52, 52, 0.75)),
+                url("{{ url_for('static', filename='images/matching.jpg') }}");
+            }
+
+            25% {
+                background-image: linear-gradient(rgba(83, 59, 42, 0.7), rgba(53, 52, 52, 0.75)),
+                url("{{ url_for('static', filename='images/fixture.jpg') }}");
+            }
+
+            50% {
+                background-image: linear-gradient(rgba(83, 59, 42, 0.7), rgba(53, 52, 52, 0.75)),
+                url("{{ url_for('static', filename='images/matching.jpg') }}");
+            }
+
+            75% {
+                background-image: linear-gradient(rgba(83, 59, 42, 0.7), rgba(53, 52, 52, 0.75)),
+                url("{{ url_for('static', filename='images/fixture.jpg') }}");
+            }
+
+            100% {
+                background-image: linear-gradient(rgba(83, 59, 42, 0.7), rgba(53, 52, 52, 0.75)),
+                url("{{ url_for('static', filename='images/trophy2.jpg') }}");
+            }
+        }
+
+        header {
+            background: rgba(255, 106, 0, 0.85);
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 30px auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px 30px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            text-align: center;
+            color: #fff;
+        }
+
+        .filter-bar {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: none;
+            background: white;
+            color: #ff6a00;
+            margin: 0 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .match-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .match-card:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .team {
+            width: 35%;
+            text-align: center;
+        }
+
+        .score {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .stage {
+            background: #ff6a00;
+            color: white;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-top: 6px;
+            font-size: 0.85rem;
+        }
+
+        .summary {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, opacity 0.5s ease;
+            opacity: 0;
+            padding-top: 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 10px;
+        }
+
+        .active .summary {
+            max-height: 500px;
+            opacity: 1;
+            padding-top: 15px;
+        }
+
+        .summary p {
+            margin: 6px 0;
+            font-size: 0.95rem;
+            color: #fff;
+        }
+
+        .summary strong {
+            color: #ffd4b0;
+        }
+
+        .toggle {
+            float: right;
+            font-size: 1.3rem;
+            color: #fff;
+            transition: 0.3s;
+        }
+
+        .active .toggle {
+            transform: rotate(180deg);
+        }
+
+        footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
+            padding: 20px 0;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .match-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .score {
+                margin: 8px 0;
+            }
+
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>⚔️ Ultimate Cup Match Fixtures</header>
+
+    <div class="container">
+        <h2>Match History</h2>
+
+        <!-- 🔽 Filter Bar -->
+        <div class="filter-bar">
+            <form method="get" action="{{ url_for('matches') }}">
+                <label>Year:</label>
+                <select name="year" onchange="this.form.submit()">
+                    <option value="">All Years</option>
+                    {% for y in years %}
+                    <option value="{{ y }}" {% if y==selected_year %}selected{% endif %}>{{ y }}</option>
+                    {% endfor %}
+                </select>
+
+                <label>Stage:</label>
+                <select name="stage" onchange="this.form.submit()">
+                    <option value="">All Stages</option>
+                    <option value="Group Stage" {% if selected_stage=='Group Stage' %}selected{% endif %}>Group Stage
+                    </option>
+                    <option value="Quarter Final" {% if selected_stage=='Quarter Final' %}selected{% endif %}>Quarter
+                        Final</option>
+                    <option value="Semi Final" {% if selected_stage=='Semi Final' %}selected{% endif %}>Semi Final
+                    </option>
+                    <option value="Final" {% if selected_stage=='Final' %}selected{% endif %}>Final</option>
+                </select>
+            </form>
+        </div>
+
+        {% for match in matches %}
+        <div class="match-card" onclick="toggleSummary(this)">
+            <div class="match-header">
+                <div class="team">
+                    <strong>{{ match.team_a }}</strong><br>
+                    <span class="scorers">
+                        ⚽ {% if match.team_a_scorers %}
+                        {{ match.team_a_scorers | join(', ') }}
+                        {% else %} —
+                        {% endif %}
+                    </span>
+                </div>
+
+                <div class="score">{{ match.score_a }} - {{ match.score_b }}</div>
+
+                <div class="team">
+                    <strong>{{ match.team_b }}</strong><br>
+                    <span class="scorers">
+                        ⚽ {% if match.team_b_scorers %}
+                        {{ match.team_b_scorers | join(', ') }}
+                        {% else %} —
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+
+            <div class="stage">{{ match.stage }}</div>
+            <div class="toggle">▼</div>
+
+            <div class="summary">
+                <p><strong>Venue:</strong> {{ match.venue }}</p>
+                <p><strong>Date:</strong> {{ match.date }}</p>
+                <hr>
+                <p><strong>{{ match.team_a }}</strong> — 🟨 {{ match.yellow_a }} | 🟥 {{ match.red_a }}</p>
+                <p><strong>{{ match.team_b }}</strong> — 🟨 {{ match.yellow_b }} | 🟥 {{ match.red_b }}</p>
+            </div>
+        </div>
+        {% endfor %}
+
+        <a href="{{ url_for('index') }}" class="btn"
+            style="display:block;text-align:center;margin-top:25px;background:#FF6A00;color:white;padding:10px 20px;text-decoration:none;border-radius:8px;">
+            🏠 Back to Home
+        </a>
+    </div>
+
+    <footer>© 2025 Ultimate Cup | Managed by CodeMindSpace</footer>
+
+    <script>
+        function toggleSummary(card) {
+            card.classList.toggle('active');
+        }
+    </script>
+
+</body>
+
+</html>

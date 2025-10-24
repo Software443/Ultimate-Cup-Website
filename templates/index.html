@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ultimate Cup | Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="icon" href="{{ url_for('static', filename='images/Ultimate Cup White.png') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        /* GENERAL */
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            opacity: 0;
+            animation: fadeInPage 1.2s ease-in forwards;
+            background-color: #0a0a0a;
+            scroll-behavior: smooth;
+        }
+
+        @keyframes fadeInPage {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* NAVBAR */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(66, 65, 65, 0.9);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 40px;
+            z-index: 1000;
+            backdrop-filter: blur(6px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-logo {
+            width: 55px;
+            height: 35px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ff6a00;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #ff6a00;
+        }
+
+        /* Hamburger */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu-toggle div {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 4px 0;
+            transition: 0.3s;
+        }
+
+        /* Responsive Menu */
+        @media (max-width: 768px) {
+            nav ul {
+                position: fixed;
+                top: 60px;
+                right: -100%;
+                width: 220px;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.95);
+                flex-direction: column;
+                align-items: center;
+                gap: 30px;
+                padding-top: 40px;
+                transition: right 0.4s ease;
+            }
+
+            nav ul.active {
+                right: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+        }
+
+        /* SLIDESHOW */
+        .slideshow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            animation: fadeSlide 20s infinite;
+        }
+
+        .slide:nth-child(1) {
+            background-image: linear-gradient(rgba(40, 20, 10, 0.7), rgba(40, 20, 10, 0.7)),
+            url("{{ url_for('static', filename='images/stadium row.jpg') }}");
+            animation-delay: 0s;
+        }
+
+        .slide:nth-child(2) {
+            background-image: linear-gradient(rgba(40, 20, 10, 0.7), rgba(40, 20, 10, 0.7)),
+            url("{{ url_for('static', filename='images/trophy_lift.jpg') }}");
+            animation-delay: 5s;
+        }
+
+        .slide:nth-child(3) {
+            background-image: linear-gradient(rgba(40, 20, 10, 0.7), rgba(40, 20, 10, 0.7)),
+            url("{{ url_for('static', filename='images/Ultimate FC.jpg') }}");
+            animation-delay: 10s;
+        }
+
+        .slide:nth-child(4) {
+            background-image: linear-gradient(rgba(40, 20, 10, 0.7), rgba(40, 20, 10, 0.7)),
+            url("{{ url_for('static', filename='images/referee.jpg') }}");
+            animation-delay: 15s;
+        }
+
+        @keyframes fadeSlide {
+
+            0%,
+            40%,
+            100% {
+                opacity: 0;
+                transform: scale(1);
+            }
+
+            10%,
+            25% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+        }
+
+        /* HERO */
+        .hero {
+            height: 100vh;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            width: 250px;
+            margin-bottom: 20px;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .btn-container {
+            margin-top: 30px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            background: #fff;
+            color: #ff6a00;
+            padding: 14px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #ff6a00;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255, 106, 0, 0.6);
+        }
+
+        /* ABOUT */
+        .about {
+            background: #fff;
+            color: #333;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .about h2 {
+            color: #ff6a00;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .about p {
+            max-width: 800px;
+            color: #0a0a0a;
+            margin: auto;
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        /* MISSION & VISION */
+        .mission-vision {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            background: #f8f8f8;
+            color: #222;
+            padding: 60px 20px;
+            gap: 30px;
+        }
+
+        .card {
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            max-width: 400px;
+            text-align: left;
+        }
+
+        .card h3 {
+            color: #ff6a00;
+            font-size: 1.5rem;
+        }
+
+        /* TEAM */
+        .team {
+            background: #fff;
+            color: #333;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .team h2 {
+            color: #ff6a00;
+            font-size: 2rem;
+            margin-bottom: 50px;
+        }
+
+        .team-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .team-card {
+            background: transparent;
+            perspective: 1000px;
+            width: 250px;
+            height: 320px;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .team-card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            backface-visibility: hidden;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .card-front {
+            background: #fff;
+        }
+
+        .card-front img {
+            width: 100%;
+            height: 70%;
+            object-fit: cover;
+        }
+
+        .card-front h3 {
+            color: #ff6a00;
+            margin-top: 10px;
+        }
+
+        .card-front p {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .card-back {
+            background: #ff6a00;
+            color: white;
+            transform: rotateY(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            font-size: 0.95rem;
+            border-radius: 15px;
+        }
+
+        /* CONTACT */
+        .contact {
+            background: #f8f8f8;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .contact h2 {
+            color: #ff6a00;
+            margin-bottom: 15px;
+        }
+
+        .contact p {
+            color: #333;
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        button {
+            background: #ff6a00;
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #e55d00;
+        }
+
+        /* Social Media Links */
+        .social-links {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .social-links h3 {
+            color: #ff6a00;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .social-links .icons a {
+            color: #ff6a00;
+            font-size: 1.8rem;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .social-links .icons a:hover {
+            color: #e65a00;
+            transform: scale(1.2);
+        }
+
+
+        /* FOOTER */
+        footer {
+            background: #0a0a0a;
+            color: rgba(255, 255, 255, 0.85);
+            text-align: center;
+            padding: 30px 10px;
+            font-size: 0.95rem;
+        }
+
+        footer a {
+            color: #ff6a00;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <nav>
+        <div class="nav-left">
+            <img src="{{ url_for('static', filename='images/RS Logo PNG.png') }}" alt="Red Spinel Logo"
+                class="nav-logo" />
+            <span class="logo-text">Red Spinel</span>
+        </div>
+        <div class="menu-toggle" id="menu-toggle">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <ul id="menu">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#mission">Mission & Vision</a></li>
+            <li><a href="#team">Our Team</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href=""> </a></li>
+            <li><a href=""> </a></li>
+            <li><a href=""> </a></li>
+        </ul>
+    </nav>
+
+    <!-- SLIDES -->
+    <div class="slideshow">
+        <div class="slide"></div>
+        <div class="slide"></div>
+        <div class="slide"></div>
+        <div class="slide"></div>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+        <img src="{{ url_for('static', filename='images/Ultimate Cup White.png') }}" alt="Ultimate Cup Logo"
+            class="logo" />
+        <h1>Welcome to the Ultimate Cup</h1>
+        <p style="color: #e55d00;">Explore match stats, team ratings, and tournament insights like never before ⚽</p>
+        <div class="btn-container">
+            <a href="{{ url_for('user_dashboard') }}" class="btn">📊 View Dashboard</a>
+            <a href="{{ url_for('matches') }}" class="btn">⚔️ Match Fixtures</a>
+            <a href="{{ url_for('login') }}" class="btn">🧑‍💼 Admin Login</a>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about" id="about">
+        <h2>About Ultimate Cup</h2>
+        <p>
+            The Ultimate Cup is a grassroots football tournament by Red Spinel, created to engage amateur clubs in
+            Lafia, Nasarawa State. It promotes community development and youth empowerment by offering a platform for
+            local teams to compete and grow.
+        </p>
+    </section>
+
+    <!-- MISSION -->
+    <section class="mission-vision" id="mission">
+        <div class="card">
+            <h3>🎯 Our Mission</h3>
+            <p>
+                To use sports as a powerful tool for mental, physical, and academic development—helping young people
+                grow stronger and more confident.
+            </p>
+        </div>
+        <div class="card">
+            <h3>🚀 Our Vision</h3>
+            <p>
+                To empower young athletes to unlock their potential, become self-reliant, and rise to represent Nasarawa
+                State on global stages.
+            </p>
+        </div>
+    </section>
+
+    <!-- TEAM -->
+    <!-- TEAM -->
+    <section class="team" id="team">
+        <h2>Meet Our Team</h2>
+        <div class="team-container">
+            <div class="team-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="{{ url_for('static', filename='images/DSC_9068.jpg') }}" alt="Team Member" />
+                        <h3>Abdullahi Gosho</h3>
+                        <p>Project Lead / Developer</p>
+                    </div>
+                    <div class="card-back">
+                        “Building platforms that inspire sports, creativity, and digital empowerment.”
+                    </div>
+                </div>
+            </div>
+
+            <div class="team-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="{{ url_for('static', filename='images/team2.jpg') }}" alt="Team Member" />
+                        <h3>Faith Adamu</h3>
+                        <p>Creative Director</p>
+                    </div>
+                    <div class="card-back">
+                        “Creativity fuels passion — and passion drives excellence on and off the pitch.”
+                    </div>
+                </div>
+            </div>
+
+            <div class="team-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="{{ url_for('static', filename='images/team3.jpg') }}" alt="Team Member" />
+                        <h3>John Audu</h3>
+                        <p>Technical Support</p>
+                    </div>
+                    <div class="card-back">
+                        “Every goal scored begins with a strong foundation — in systems and strategy.”
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🔹 Contact Section -->
+    <section class="contact" id="contact">
+        <h2>📩 Contact Us</h2>
+        <p>Have questions, feedback, or partnership ideas? Reach out — we’d love to hear from you!</p>
+
+        <form action="https://formsubmit.co/redspinelnig@gmail.com" method="POST" class="contact-form">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_next" value="https://yourdomain.com/thank-you">
+
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+
+            <button type="submit">Send Message</button>
+        </form>
+
+
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="social-links">
+            <h3>🌐 Connect with Us</h3>
+            <div class="icons">
+                <a href="https://www.facebook.com/share/1dLmdDtPWY/?mibextid=wwXIfr" target="_blank" title="Facebook"><i
+                        class="fab fa-facebook-f"></i></a>
+                <a href="https://twitter.com/yourprofile" target="_blank" title="X (Twitter)"><i
+                        class="fab fa-x-twitter"></i></a>
+                <a href="https://www.instagram.com/redspinelnig?igsh=ZHNncnZneGZybzd1&utm_source=qr" target="_blank"
+                    title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://linkedin.com/in/yourprofile" target="_blank" title="LinkedIn"><i
+                        class="fab fa-linkedin-in"></i></a>
+                <a href="https://youtube.com/yourchannel" target="_blank" title="YouTube"><i
+                        class="fab fa-youtube"></i></a>
+                <a href="https://whatsapp.com/channel/0029VaCYcy01nozDtz33VW2U" target="_blank" title="WhatsApp"><i
+                        class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+        © 2025 Ultimate Cup | Proudly built by
+        <a href="https://flask.palletsprojects.com/" target="_blank">CodeMindSpace</a>
+    </footer>
+
+    <script>
+        const menuToggle = document.getElementById('menu-toggle');
+        const menu = document.getElementById('menu');
+        menuToggle.addEventListener('click', () => {
+            menu.classList.toggle('active');
+        });
+    </script>
+</body>
+
+</html>
