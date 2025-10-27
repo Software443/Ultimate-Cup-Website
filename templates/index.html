@@ -41,7 +41,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(66, 65, 65, 0.9);
+            background: #fff;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -58,9 +58,9 @@
         }
 
         .nav-logo {
-            width: 55px;
-            height: 35px;
-            object-fit: contain;
+            width: 200px;
+            height: 50px;
+            object-fit: cover;
         }
 
         .logo-text {
@@ -78,7 +78,7 @@
         }
 
         nav ul li a {
-            color: #fff;
+            color: #0b0a0a;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s ease;
@@ -469,7 +469,7 @@
         <div class="nav-left">
             <img src="{{ url_for('static', filename='images/RS Logo PNG.png') }}" alt="Red Spinel Logo"
                 class="nav-logo" />
-            <span class="logo-text">Red Spinel</span>
+            <!-- <span class="logo-text">Red Spinel</span> -->
         </div>
         <div class="menu-toggle" id="menu-toggle">
             <div></div>
@@ -584,7 +584,7 @@
             <div class="team-card">
                 <div class="card-inner">
                     <div class="card-front">
-                        <img src="{{ url_for('static', filename='images/team3.jpg') }}" alt="Team Member" />
+                        <img src="{{ url_for('static', filename='images/Musa.jpg') }}" alt="Team Member" />
                         <h3>Weide Aaron Musa</h3>
                         <p>Sponsorships & Partnerships Director</p>
                     </div>
