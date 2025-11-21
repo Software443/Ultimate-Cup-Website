@@ -223,7 +223,21 @@
 
 <body>
 
-    <header>🏆 Ultimate Cup Dashboard</header>
+    <header>
+        <div style="display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:auto;">
+            <div style="font-size:1.8rem;font-weight:600;">🏆 Ultimate Cup Dashboard</div>
+            <nav style="display:flex;gap:20px;">
+                <a href="{{ url_for('index') }}"
+                    style="color:white;text-decoration:none;font-weight:500;transition:0.3s;">
+                    🏠 Home
+                </a>
+                <a href="{{ url_for('matches') }}"
+                    style="color:white;text-decoration:none;font-weight:500;transition:0.3s;">
+                    ⚔️ Match Fixtures
+                </a>
+            </nav>
+        </div>
+    </header>
 
     <div class="container">
         <h2>{{ year }} Team Ratings</h2>
