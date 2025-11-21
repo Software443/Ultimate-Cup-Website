@@ -150,19 +150,19 @@
         }
 
         .slide:nth-child(1) {
-            background-image: linear-gradient(rgba(40, 20, 10, 0.7), rgba(40, 20, 10, 0.7)),
+            background-image: linear-gradient(rgba(89, 88, 87, 0.7), rgba(40, 20, 10, 0.7)),
             url("{{ url_for('static', filename='images/stadium row.jpg') }}");
             animation-delay: 0s;
         }
 
         .slide:nth-child(2) {
-            background-image: linear-gradient(rgba(40, 20, 10, 0.7), rgba(40, 20, 10, 0.7)),
+            background-image: linear-gradient(rgba(85, 80, 80, 0.7), rgba(40, 20, 10, 0.7)),
             url("{{ url_for('static', filename='images/trophy_lift.jpg') }}");
             animation-delay: 5s;
         }
 
         .slide:nth-child(3) {
-            background-image: linear-gradient(rgba(40, 20, 10, 0.7), rgba(40, 20, 10, 0.7)),
+            background-image: linear-gradient(rgba(89, 89, 89, 0.7), rgba(40, 20, 10, 0.7)),
             url("{{ url_for('static', filename='images/Ultimate FC.jpg') }}");
             animation-delay: 10s;
         }
@@ -503,8 +503,8 @@
         <h1>Welcome to the Ultimate Cup</h1>
         <p style="color: #e55d00;">Explore match stats, team ratings, and tournament insights like never before ⚽</p>
         <div class="btn-container">
-            <a href="{{ url_for('user_dashboard') }}" class="btn">📊 View Dashboard</a>
-            <a href="{{ url_for('matches') }}" class="btn">⚔️ Match Fixtures</a>
+            <!-- <a href="{{ url_for('user_dashboard') }}" class="btn">📊 View Dashboard</a> -->
+            <a href="{{ url_for('matches') }}" class="btn">📊 View Dashboard</a>
             <a href="{{ url_for('login') }}" class="btn">🧑‍💼 Admin Login</a>
         </div>
     </section>
